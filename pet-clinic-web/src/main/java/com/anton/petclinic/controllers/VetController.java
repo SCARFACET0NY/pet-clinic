@@ -2,6 +2,7 @@ package com.anton.petclinic.controllers;
 
 import com.anton.petclinic.services.VetService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -13,7 +14,8 @@ public class VetController {
     }
 
     @RequestMapping("/vets")
-    public String listVets() {
+    public String listVets(Model model) {
+        model.addAttribute("vets", vetService.findAll());
         return "vets/index";
     }
 }
