@@ -22,6 +22,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class OwnerJpaServiceTest {
+    public static final Long ID = 1L;
     public static final String LAST_NAME = "Smith";
     @Mock
     OwnerRepository ownerRepository;
@@ -35,9 +36,7 @@ class OwnerJpaServiceTest {
 
     @BeforeEach
     void setUp() {
-        owner = new Owner();
-        owner.setId(1L);
-        owner.setLastName(LAST_NAME);
+        owner = Owner.builder().id(ID).lastName(LAST_NAME).build();
     }
 
     @Test
@@ -51,14 +50,9 @@ class OwnerJpaServiceTest {
 
     @Test
     void findAll() {
-        Owner owner1 = new Owner();
-        Owner owner2 = new Owner();
-        owner1.setId(1L);
-        owner2.setId(2L);
-
         Set<Owner> owners = new HashSet<>();
-        owners.add(owner1);
-        owners.add(owner2);
+        owners.add(Owner.builder().id(ID).build());
+        owners.add(Owner.builder().id(2L).build());
 
         when(ownerRepository.findAll()).thenReturn(owners);
         Set<Owner> returnedOwners = ownerJpaService.findAll();
@@ -70,26 +64,25 @@ class OwnerJpaServiceTest {
     @Test
     void findById() {
         when(ownerRepository.findById(anyLong())).thenReturn(Optional.of(owner));
-        Owner returnedOwner = ownerJpaService.findById(1L);
+        Owner returnedOwner = ownerJpaService.findById(ID);
         assertNotNull(returnedOwner);
     }
 
     @Test
     void findByIdNotFound() {
         when(ownerRepository.findById(anyLong())).thenReturn(Optional.empty());
-        Owner returnedOwner = ownerJpaService.findById(1L);
+        Owner returnedOwner = ownerJpaService.findById(ID);
         assertNull(returnedOwner);
     }
 
     @Test
     void save() {
         when(ownerRepository.save(any())).thenReturn(owner);
-        Owner ownerToSave = new Owner();
-        ownerToSave.setId(1L);
-        Owner savedOwner = ownerJpaService.save(ownerToSave);
+
+        Owner savedOwner = ownerJpaService.save(Owner.builder().id(ID).build());
 
         assertNotNull(savedOwner);
-        assertEquals(1L, savedOwner.getId());
+        assertEquals(ID, savedOwner.getId());
     }
 
     @Test
