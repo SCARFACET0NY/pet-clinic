@@ -32,13 +32,8 @@ class OwnerControllerTest {
     @BeforeEach
     void setUp() {
         owners = new HashSet<>();
-        Owner owner1 = new Owner();
-        Owner owner2 = new Owner();
-        owner1.setId(1L);
-        owner2.setId(2L);
-
-        owners.add(owner1);
-        owners.add(owner2);
+        owners.add(Owner.builder().id(1L).build());
+        owners.add(Owner.builder().id(2L).build());
 
         mockMvc = MockMvcBuilders.standaloneSetup(ownerController).build();
     }
